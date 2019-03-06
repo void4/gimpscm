@@ -14,6 +14,7 @@ for path in glob("FauxPas/*.png"):
     if g is None:
         g = c
     else:
+        # Chain Contexts by adding them
         g += c
 
 g.execute()
