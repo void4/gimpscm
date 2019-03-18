@@ -1,10 +1,10 @@
 #(gimp-procedural-db-dump filename)
 #(gimp-procedural-db-dump "procdump.txt")
 
-from lisp_parser import parse
+from .lisp_parser import parse
 import json
 import os
-with open("procdump.txt") as f:
+with open("gimp/procdump.txt") as f:
 	procs = "("+ f.read() + ")"
 
 tree = parse(procs)
@@ -85,7 +85,11 @@ class Context:
 
 		footer = """\n(gimp-file-save RUN-NONINTERACTIVE image drawable outname outname)
 (gimp-image-delete image))""".replace("outname", '"%s"' % self.outpath)
-		return header + "\n".join(self.l) + footer + "\n".join([str(t) for t in self.tail])
+		if len(self.l) > 0:
+			ownstuff = header + "\n".join(self.l) + footer
+		else:
+			ownstuff = ""
+		return ownstuff + "\n".join([str(t) for t in self.tail])
 
 	def execute(self, showcmd=False, warning=False):
 		cmd = """gimp -i -b '{batchscript}' -b '(gimp-quit 0)'""".format(batchscript=str(self))
