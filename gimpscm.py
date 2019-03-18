@@ -89,7 +89,7 @@ class Context:
 			ownstuff = header + "\n".join(self.l) + footer
 		else:
 			ownstuff = ""
-		return ownstuff + "\n".join([str(t) for t in self.tail])
+		return ownstuff + "\n".join([str(t) for t in self.tail if not t is self])
 
 	def execute(self, showcmd=False, warning=False):
 		cmd = """gimp -i -b '{batchscript}' -b '(gimp-quit 0)'""".format(batchscript=str(self))
@@ -100,6 +100,14 @@ class Context:
 			print(cmd)
 
 		os.system(cmd)
+	
+	def file_execute(self, path=".gimp-2.8/scripts/tempbatch.scm", exe=True):
+		
+		with open(os.path.join(os.path.expanduser("~"), path), "w+") as scm:
+			scm.write("(define (tempbatch)\n" + str(self) + "\n)")
+		
+		if exe:
+			os.system("gimp -i -b '(tempbatch)' -b '(gimp-quit 0)'")
 
 	def __add__(self, other):
 		#ideally, many images in one batch, chain Contexts
