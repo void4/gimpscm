@@ -17,7 +17,12 @@ print(dir(c))
 c.rect_select(10, 20, 500, 700, 2, 10, 10)
 
 # Execute the Context, opens Gimp in batch mode
-g.execute()
+c.execute()
+
+# If the command is too long, it may be necessary to store it in a script file and call that
+# The first argument is the gimp scripts folder relative from the home directory
+# The second argument specifies if it should be executed after it was written
+c.file_execute(path=".gimp-2.8/scripts/tempbatch.scm", exe=True):
 
 # To get more info about a method
 help(c.rect_select)
