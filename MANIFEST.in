@@ -1,1 +1,1 @@
-include gimpscm/procdump.txt
+recursive-include *.txt *.py
