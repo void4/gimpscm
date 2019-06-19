@@ -4,7 +4,7 @@ import os
 
 g = None
 
-for path in glob("FauxPas/*.png"):
+for path in glob("images/*.png"):
 
     c = Context(path, os.path.join(os.path.dirname(path), "fastbatch", os.path.basename(path)))
     #print(dir(c))
