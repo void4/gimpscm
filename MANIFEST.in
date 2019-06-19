@@ -1,1 +1,1 @@
-recursive-include *.txt *.py
+recursive-include gimpscm *.txt *.py
