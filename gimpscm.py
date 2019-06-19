@@ -4,7 +4,9 @@
 from .lisp_parser import parse
 import json
 import os
-with open("gimp/procdump.txt") as f:
+
+PATH = os.path.join(os.path.dirname(__file__), "procdump.txt")
+with open(PATH) as f:
 	procs = "("+ f.read() + ")"
 
 tree = parse(procs)
