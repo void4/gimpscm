@@ -2,13 +2,13 @@ from distutils.core import setup
 setup(
   name = 'gimpscm',         # How you named your package folder (MyLib)
   packages = ['gimpscm'],   # Chose the same as "name"
-  version = '0.1',      # Start with a small number and increase it with every change you make
+  version = '0.2',      # Start with a small number and increase it with every change you make
   license='CC BY-NC 3.0',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'Automatically generate and execute gimp script files',   # Give a short description about your library
   author = 'void4',                   # Type in your name
   author_email = 'void4.noreply@github.io',      # Type in your E-Mail
   url = 'https://github.com/void4/gimpscm',   # Provide either the link to your github or to your website
-  download_url = 'https://github.com/void4/gimpscm/archive/0.1.tar.gz',    # I explain this later on
+  download_url = 'https://github.com/void4/gimpscm/archive/0.2.tar.gz',    # I explain this later on
   keywords = ['gimp', 'image', 'editing'],   # Keywords that define your package best
   install_requires=[],
   classifiers=[
