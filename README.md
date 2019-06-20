@@ -19,6 +19,9 @@ c = Context("infile.png", "outfile.png")
 # To list all attached methods
 print(dir(c))
 
+# To get more info about a method
+help(c.rect_select)
+
 # Add a method invocation to the Context
 # Method prefixes (script_fu_, plug_in_, gimp_) are omitted.
 # run-mode, image and layer arguments are supplied automatically by the Context
@@ -31,8 +34,4 @@ c.execute()
 # The first argument is the gimp scripts folder relative from the home directory
 # The second argument specifies if it should be executed after it was written
 c.file_execute(path=".gimp-2.8/scripts/tempbatch.scm", exe=True)
-
-# To get more info about a method
-help(c.rect_select)
-
 ```
