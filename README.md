@@ -1,4 +1,12 @@
-# PyGimpBatchGen
+# gimpscm
+
+Generates Scheme Batch files for Gimp and executes them
+
+## Installation
+
+`pip install gimpscm`
+
+## Usage
 
 See fastbatch.py for a more complex usage example
 
