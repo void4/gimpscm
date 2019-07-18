@@ -11,6 +11,21 @@ with open(PATH) as f:
 
 tree = parse(procs)
 
+class HelpString:
+	def __init__(self, name):
+		self.name = name
+
+	def __str__(self):
+		return self.name
+
+class UniqueName:
+	def __init__(self, id):
+		self.id = id
+		self.name = "name%i" % self.id
+
+	def __str__(self):
+		return self.name
+
 class Context:
 
 	def makefunc(self, reg):
@@ -48,12 +63,20 @@ class Context:
 					modargs.append(str(livearg) if not isinstance(livearg, str) else '"%s"' % livearg)
 					trueindex += 1
 
-			text = "(" + name + " " + " ".join(modargs) + ")"
+			text = "(" + str(name) + " " + " ".join(modargs) + ")"
+
+			result = None
+			if len(rets) == 1:
+				result = self.uniqueName()
+				self.results.append(result)
+				text = "(set! %s (car %s))" % (result, text)
+			elif len(rets) > 1:
+				print("WARNING, can't process > 1 return value in", name)
 
 			if not optargs.get("test", False):
 				self.l.append(text)
 
-			return text
+			return text if result is None else result
 
 		inner.__doc__ = "\n".join([str(l) for l in reg[1:8]])
 		inner.__doc__ += "\nArgs:\n" + json.dumps(args, sort_keys=True, indent=4)
@@ -63,11 +86,18 @@ class Context:
 
 		return inner
 
+	def uniqueName(self):
+		self.nameID += 1
+		return UniqueName(self.nameID)
+
 	def __init__(self, path, outpath=None, interactive=False):
+		self.nameID = 0
 		self.tail = []
 		self.l = []
 		self.path = path
 		self.outpath = path if outpath is None else outpath
+
+		self.results = []
 
 		self.RUNMODE = "0" if interactive else "1"#"RUN-INTERACTIVE" if interactive else "RUN_NONINTERACTIVE"
 
@@ -83,7 +113,7 @@ class Context:
 	def __str__(self):
 		header = """(let* (
     (image (car (gimp-file-load RUN-NONINTERACTIVE inname inname)))
-    (drawable (car (gimp-image-get-active-layer image))))\n""".replace("inname", '"%s"' % self.path)
+    (drawable (car (gimp-image-get-active-layer image)))\n\treturnvalues)\n""".replace("inname", '"%s"' % self.path).replace("returnvalues", "\n".join(["(%s 0)" % r for r in self.results]))
 
 		footer = """\n(gimp-file-save RUN-NONINTERACTIVE image drawable outname outname)
 (gimp-image-delete image))""".replace("outname", '"%s"' % self.outpath)
@@ -102,12 +132,12 @@ class Context:
 			print(cmd)
 
 		os.system(cmd)
-	
+
 	def file_execute(self, path=".gimp-2.8/scripts/tempbatch.scm", exe=True):
-		
+
 		with open(os.path.join(os.path.expanduser("~"), path), "w+") as scm:
 			scm.write("(define (tempbatch)\n" + str(self) + "\n)")
-		
+
 		if exe:
 			os.system("gimp -i -b '(tempbatch)' -b '(gimp-quit 0)'")
 

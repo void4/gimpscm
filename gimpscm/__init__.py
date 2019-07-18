@@ -1,1 +1,1 @@
-from gimpscm.gimpscm import Context
+from gimpscm.gimpscm import Context, HelpString
